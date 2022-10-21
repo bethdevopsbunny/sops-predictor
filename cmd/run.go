@@ -161,7 +161,8 @@ func getData(encryptedString string, dataToCollect string) string {
 			if dataToCollect == "type:" {
 				i = strings.TrimSuffix(i, "]")
 			}
-			return strings.Trim(i, dataToCollect)
+
+			return strings.TrimPrefix(i, dataToCollect)
 		}
 
 	}
