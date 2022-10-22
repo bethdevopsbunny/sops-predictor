@@ -22,8 +22,9 @@ var runCmd = &cobra.Command{
 		lines := ReadEachLine(args[0])
 
 		for _, line := range lines {
-			// sops places a management object at the bottom of its yaml
-			// none of this is important so I just exit the application here.
+
+			// sops puts a management object at the bottom of its yaml
+			// none of this is important, so I just exit the application here.
 			if line == "sops:" {
 				os.Exit(1)
 			}
@@ -56,7 +57,7 @@ var runCmd = &cobra.Command{
 //
 //
 
-//ReadEachLine standard read text file funcation
+//ReadEachLine standard read text file function
 func ReadEachLine(filepath string) (fileLines []string) {
 
 	readFile, err := os.Open(filepath)
@@ -81,7 +82,7 @@ func ReadEachLine(filepath string) (fileLines []string) {
 //
 //
 
-//dataCount simple maths function that applies the pattern observed in the unenrypted string.
+//dataCount simple maths function that applies the pattern observed in the unencrypted string.
 func dataCount(data string) int {
 
 	return len(data) - (getGrouping(len(data)) + getPaddingSize(data))
@@ -94,13 +95,13 @@ func getGrouping(length int) int {
 }
 
 //getPaddingSize the full encrypted string contains padding that helps identify where the encrypted string sits in the 3 set
-func getPaddingSize(encryptedString string) int {
+func getPaddingSize(data string) int {
 
-	if strings.HasSuffix(encryptedString, "==") {
+	if strings.HasSuffix(data, "==") {
 		return 2
 	}
 
-	if strings.HasSuffix(encryptedString, "=") {
+	if strings.HasSuffix(data, "=") {
 		return 1
 	}
 
@@ -112,7 +113,7 @@ func getPaddingSize(encryptedString string) int {
 //
 //
 
-type EncryptedString struct {
+type SopsEncDataSet struct {
 	name              string
 	encryption        string
 	data              string
@@ -124,34 +125,32 @@ type EncryptedString struct {
 
 //parseLine manages raw text line to object conversion.
 //with below helper functions
-func parseLine(encryptedString string) EncryptedString {
+func parseLine(dataSetString string) SopsEncDataSet {
 
-	encryptedStringObject := EncryptedString{
-		name:       getKey(encryptedString),
-		encryption: getEncryption(encryptedString),
-		data:       getData(encryptedString, "data:"),
-		iv:         getData(encryptedString, "iv:"),
-		tag:        getData(encryptedString, "tag:"),
-		_type:      getData(encryptedString, "type:"),
+	return SopsEncDataSet{
+		name:       getKey(dataSetString),
+		encryption: getEncryption(dataSetString),
+		data:       getData(dataSetString, "data:"),
+		iv:         getData(dataSetString, "iv:"),
+		tag:        getData(dataSetString, "tag:"),
+		_type:      getData(dataSetString, "type:"),
 	}
-
-	return encryptedStringObject
 
 }
 
-func getKey(encryptedString string) string {
-	split := strings.Split(encryptedString, ":")
+func getKey(dataSetString string) string {
+	split := strings.Split(dataSetString, ":")
 	return split[0]
 }
 
-func getEncryption(encryptedString string) string {
-	split := strings.Split(encryptedString, ",")
+func getEncryption(dataSetString string) string {
+	split := strings.Split(dataSetString, ",")
 	split = strings.Split(split[0], "[")
 	return split[0]
 }
 
-func getData(encryptedString string, dataToCollect string) string {
-	split := strings.Split(encryptedString, ",")
+func getData(dataSetString string, dataToCollect string) string {
+	split := strings.Split(dataSetString, ",")
 
 	for _, i := range split {
 
