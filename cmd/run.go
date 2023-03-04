@@ -15,8 +15,8 @@ func init() {
 
 var runCmd = &cobra.Command{
 	Use:   "run",
-	Short: "Print the version number of sops-predictor",
-	Long:  `Print the version number of sops-predictor`,
+	Short: "Run the sops-predictor program",
+	Long:  `Run the sops-predictor program`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		lines := ReadEachLine(args[0])
@@ -57,7 +57,7 @@ var runCmd = &cobra.Command{
 //
 //
 
-//ReadEachLine standard read text file function
+// ReadEachLine standard read text file function
 func ReadEachLine(filepath string) (fileLines []string) {
 
 	readFile, err := os.Open(filepath)
@@ -82,19 +82,19 @@ func ReadEachLine(filepath string) (fileLines []string) {
 //
 //
 
-//dataCount simple maths function that applies the pattern observed in the unencrypted string.
+// dataCount simple maths function that applies the pattern observed in the unencrypted string.
 func dataCount(data string) int {
 
 	return len(data) - (getGrouping(len(data)) + getPaddingSize(data))
 }
 
-//getGrouping applies the pattern applied by sops that increased the difference between the unencrypted string
-//and the encrypted one. explained in the readme.
+// getGrouping applies the pattern applied by sops that increased the difference between the unencrypted string
+// and the encrypted one. explained in the readme.
 func getGrouping(length int) int {
 	return length / 4
 }
 
-//getPaddingSize the full encrypted string contains padding that helps identify where the encrypted string sits in the 3 set
+// getPaddingSize the full encrypted string contains padding that helps identify where the encrypted string sits in the 3 set
 func getPaddingSize(data string) int {
 
 	if strings.HasSuffix(data, "==") {
@@ -123,8 +123,8 @@ type SopsEncDataSet struct {
 	unencryptedLength int
 }
 
-//parseLine manages raw text line to object conversion.
-//with below helper functions
+// parseLine manages raw text line to object conversion.
+// with below helper functions
 func parseLine(dataSetString string) SopsEncDataSet {
 
 	return SopsEncDataSet{
