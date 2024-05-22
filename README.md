@@ -1,4 +1,7 @@
 # sops-predictor
+
+Edit: hey i did a little blogpost about this https://blog.bethdevopsbunny.com/Predicting+Sops
+
 sops doesnt hide the length of the encrypted fields very well, I noticed this and found that mozilla are aware of this [bug](https://github.com/mozilla/sops/issues/815),
 but that doesnt mean i cant have fun with it! 
 
